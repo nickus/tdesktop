@@ -366,6 +366,7 @@ public:
 	HistoryItem *lastMsg = nullptr;
 	HistoryItem *lastSentMsg = nullptr;
 	QDateTime lastMsgDate;
+	QDateTime lastImportantMsgDate;
 
 	typedef QList<HistoryItem*> NotifyQueue;
 	NotifyQueue notifies;

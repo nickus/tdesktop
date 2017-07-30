@@ -1937,6 +1937,12 @@ void History::setLastMessage(HistoryItem *msg) {
 	if (msg) {
 		if (!lastMsg) Local::removeSavedPeer(peer);
 		lastMsg = msg;
+
+		if (lastImportantMsgDate.isNull()) lastImportantMsgDate = msg->date;
+		if ((msg->mentionsMe() || msg->from()->isSelf()) && msg->date > lastImportantMsgDate) {
+		    lastImportantMsgDate = msg->date;
+		}
+
 		setChatsListDate(msg->date);
 	} else {
 		lastMsg = 0;
@@ -1971,6 +1977,8 @@ void History::updateChatListSortPosition() {
 			if (!Data::draftIsNull(draft) && draft->date > lastMsgDate) {
 				return draft->date;
 			}
+		} else if(mute() && !lastImportantMsgDate.isNull()) {
+			return lastImportantMsgDate;
 		}
 		return lastMsgDate;
 	};
